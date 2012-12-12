@@ -4699,6 +4699,7 @@ static LRESULT FrameOnCommand(WindowInfo *win, HWND hwnd, UINT msg, WPARAM wPara
         case IDM_ZOOM_1600:
         case IDM_ZOOM_800:
         case IDM_ZOOM_400:
+        case IDM_ZOOM_300:
         case IDM_ZOOM_200:
         case IDM_ZOOM_150:
         case IDM_ZOOM_125:
