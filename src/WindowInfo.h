@@ -218,6 +218,7 @@ public:
     virtual void LaunchBrowser(const WCHAR *url);
     virtual void FocusFrame(bool always);
     virtual void Repaint() { RepaintAsync(); };
+    virtual void UpdateScrollbars();
     virtual void UpdateScrollbars(SizeI canvas);
     virtual void RequestRendering(int pageNo);
     virtual void CleanUp(DisplayModel *dm);

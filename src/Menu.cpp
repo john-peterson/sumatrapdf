@@ -37,10 +37,9 @@ void MenuUpdateDisplayMode(WindowInfo* win, HMENU menu)
     else
         assert(!win->dm && DM_AUTOMATIC == displayMode);
 
-    CheckMenuRadioItem(win->menu, IDM_VIEW_LAYOUT_FIRST, IDM_VIEW_LAYOUT_LAST, id, MF_BYCOMMAND);
-    win::menu::SetChecked(win->menu, IDM_VIEW_CONTINUOUS, IsContinuous(displayMode));
     CheckMenuRadioItem(menu, IDM_VIEW_LAYOUT_FIRST, IDM_VIEW_LAYOUT_LAST, id, MF_BYCOMMAND);
     win::menu::SetChecked(menu, IDM_VIEW_CONTINUOUS, IsContinuous(displayMode));
+    win::menu::SetChecked(menu, IDM_VIEW_SCROLLBAR, win->dm->showScrollbars);
     win::menu::SetEnabled(menu, IDM_VIEW_SCROLLBAR, IsContinuous(displayMode));
     win::menu::SetChecked(menu, IDM_VIEW_FULLSCREEN, win->fullScreen);
 }
@@ -75,6 +74,7 @@ static MenuDef menuDefView[] = {
     { _TRN("&Facing\tCtrl+7"),              IDM_VIEW_FACING,            MF_NOT_FOR_CHM },
     { _TRN("&Book View\tCtrl+8"),           IDM_VIEW_BOOK,              MF_NOT_FOR_CHM },
     { _TRN("Show &pages continuously"),     IDM_VIEW_CONTINUOUS,        MF_NOT_FOR_CHM },
+    { _TRN("Show scr&ollbars"),             IDM_VIEW_SCROLLBAR,         MF_NO_TRANSLATE | MF_NOT_FOR_CHM },
     { SEP_ITEM,                             0,                          MF_NOT_FOR_CHM },
     { _TRN("Rotate &Left\tCtrl+Shift+-"),   IDM_VIEW_ROTATE_LEFT,       MF_NOT_FOR_CHM },
     { _TRN("Rotate &Right\tCtrl+Shift++"),  IDM_VIEW_ROTATE_RIGHT,      MF_NOT_FOR_CHM },

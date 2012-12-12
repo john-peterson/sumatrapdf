@@ -990,6 +990,7 @@ static bool LoadDocIntoWindow(LoadArgs& args, PasswordUI *pwdUI,
                 ss.x = state->scrollPos.x;
                 ss.y = state->scrollPos.y;
             }
+            win->dm->showScrollbars = state->showScrollbars;
             // else let win.dm->Relayout() scroll to fit the page (again)
         } else if (startPage > win->dm->PageCount()) {
             ss.page = win->dm->PageCount();
@@ -1093,6 +1094,7 @@ Error:
         EnterFullscreen(*win);
     if (!isNewWindow && win->presentation && win->dm)
         win->dm->SetPresentationMode(true);
+    win->UpdateScrollbars();
 
     t.Stop();
     dbglog::LogF("LoadDocIntoWindow() time: %.2f", t.GetTimeInMs());
@@ -1616,8 +1618,8 @@ static void UpdateCanvasScrollbars(DisplayModel *dm, HWND hwndCanvas, SizeI canv
         si.nMax = canvas.dx - 1;
         si.nPage = viewPort.dx;
     }
-    ShowScrollBar(hwndCanvas, SB_HORZ, viewPort.dx < canvas.dx);
-    SetScrollInfo(hwndCanvas, SB_HORZ, &si, TRUE);
+    SetScrollInfo(hwndCanvas, SB_HORZ, &si, dm->showScrollbars);
+    ShowScrollBar(hwndCanvas, SB_HORZ, dm->showScrollbars && viewPort.dx < canvas.dx);
 
     if (viewPort.dy >= canvas.dy) {
         si.nPos = 0;
@@ -1636,8 +1638,13 @@ static void UpdateCanvasScrollbars(DisplayModel *dm, HWND hwndCanvas, SizeI canv
             si.nMax -= viewPort.dy - si.nPage;
         }
     }
-    ShowScrollBar(hwndCanvas, SB_VERT, viewPort.dy < canvas.dy);
-    SetScrollInfo(hwndCanvas, SB_VERT, &si, TRUE);
+    SetScrollInfo(hwndCanvas, SB_VERT, &si, dm->showScrollbars);
+    ShowScrollBar(hwndCanvas, SB_VERT, dm->showScrollbars && viewPort.dy < canvas.dy);
+}
+
+void WindowInfo::UpdateScrollbars()
+{
+    UpdateCanvasScrollbars(dm, hwndCanvas, dm->GetCanvasSize());
 }
 
 void WindowInfo::UpdateScrollbars(SizeI canvas)
@@ -2235,16 +2242,16 @@ static void OnMouseLeftButtonUp(WindowInfo& win, int x, int y, WPARAM key)
         ClearSearchResult(&win);
 
     if (didDragMouse)
-        /* pass */;
+        win.UpdateScrollbars();
     else if (activeLink && activeLink->GetRect().Contains(ptPage)) {
         win.linkHandler->GotoLink(activeLink->AsLink());
         SetCursor(gCursorArrow);
     }
     /* in presentation mode, change pages on left-clicks */
     else if (win.fullScreen || PM_ENABLED == win.presentation) {
-        if (displayModeSingle(displayMode) && isTop || !displayModeSingle(displayMode) && isLeft)
+        if (IsSingle(displayMode) && isTop || !IsSingle(displayMode) && isLeft)
             win.dm->GoToPrevPage(0);
-        else if (displayModeSingle(displayMode) && isBottom || !displayModeSingle(displayMode) && isRight)
+        else if (IsSingle(displayMode) && isBottom || !IsSingle(displayMode) && isRight)
             win.dm->GoToNextPage(0);
     }
     /* return from white/black screens in presentation mode */
@@ -3090,7 +3097,7 @@ static void OnVScroll(WindowInfo& win, WPARAM wParam)
     // Set the position and then retrieve it.  Due to adjustments
     // by Windows it may not be the same as the value set.
     si.fMask = SIF_POS;
-    SetScrollInfo(win.hwndCanvas, SB_VERT, &si, TRUE);
+    SetScrollInfo(win.hwndCanvas, SB_VERT, &si, win.dm->showScrollbars);
     GetScrollInfo(win.hwndCanvas, SB_VERT, &si);
 
     // If the position has changed, scroll the window and update it
@@ -3123,7 +3130,7 @@ static void OnHScroll(WindowInfo& win, WPARAM wParam)
     // Set the position and then retrieve it.  Due to adjustments
     // by Windows it may not be the same as the value set.
     si.fMask = SIF_POS;
-    SetScrollInfo(win.hwndCanvas, SB_HORZ, &si, TRUE);
+    SetScrollInfo(win.hwndCanvas, SB_HORZ, &si, win.dm->showScrollbars);
     GetScrollInfo(win.hwndCanvas, SB_HORZ, &si);
 
     // If the position has changed, scroll the window and update it
@@ -4725,6 +4732,12 @@ static LRESULT FrameOnCommand(WindowInfo *win, HWND hwnd, UINT msg, WPARAM wPara
 
         case IDM_VIEW_CONTINUOUS:
             OnMenuViewContinuous(*win);
+            break;
+
+        case IDM_VIEW_SCROLLBAR:
+            win->dm->showScrollbars = !win->dm->showScrollbars;
+            ToggleWindowStyle(win->hwndCanvas, WS_VSCROLL|WS_HSCROLL, win->dm->showScrollbars, GWL_STYLE, true);
+            win->UpdateScrollbars();
             break;
 
         case IDM_VIEW_SHOW_HIDE_TOOLBAR:

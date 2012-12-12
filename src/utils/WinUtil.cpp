@@ -630,7 +630,7 @@ bool CopyImageToClipboard(HBITMAP hbmp, bool appendOnly)
     return ok;
 }
 
-void ToggleWindowStyle(HWND hwnd, DWORD flag, bool enable, int type)
+void ToggleWindowStyle(HWND hwnd, DWORD flag, bool enable, int type, bool redraw)
 {
     DWORD style = GetWindowLong(hwnd, type);
     if (enable)
@@ -638,6 +638,9 @@ void ToggleWindowStyle(HWND hwnd, DWORD flag, bool enable, int type)
     else
         style = style & ~flag;
     SetWindowLong(hwnd, type, style);
+
+    if (redraw)
+        SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
 }
 
 DoubleBuffer::DoubleBuffer(HWND hwnd, RectI rect) :
