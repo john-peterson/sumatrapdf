@@ -896,7 +896,7 @@ static bool LoadDocIntoWindow(LoadArgs& args, PasswordUI *pwdUI, DisplayState *s
     ScrollState ss(1, -1, -1);
     bool showAsFullScreen = WIN_STATE_FULLSCREEN == gGlobalPrefs->windowState;
     int showType = SW_NORMAL;
-    if (gGlobalPrefs->windowState == WIN_STATE_MAXIMIZED || showAsFullScreen)
+    if (gGlobalPrefs->windowState == WIN_STATE_MAXIMIZED)
         showType = SW_MAXIMIZE;
 
     bool showToc = gGlobalPrefs->showToc;
@@ -906,7 +906,7 @@ static bool LoadDocIntoWindow(LoadArgs& args, PasswordUI *pwdUI, DisplayState *s
         showAsFullScreen = WIN_STATE_FULLSCREEN == state->windowState;
         if (state->windowState == WIN_STATE_NORMAL)
             showType = SW_NORMAL;
-        else if (state->windowState == WIN_STATE_MAXIMIZED || showAsFullScreen)
+        else if (state->windowState == WIN_STATE_MAXIMIZED)
             showType = SW_MAXIMIZE;
         else if (state->windowState == WIN_STATE_MINIMIZED)
             showType = SW_MINIMIZE;
@@ -1266,8 +1266,7 @@ WindowInfo *CreateAndShowWindowInfo()
     if (!win)
         return NULL;
 
-    if (WIN_STATE_FULLSCREEN == gGlobalPrefs->windowState ||
-        WIN_STATE_MAXIMIZED == gGlobalPrefs->windowState)
+    if (WIN_STATE_MAXIMIZED == gGlobalPrefs->windowState)
         ShowWindow(win->hwndFrame, SW_MAXIMIZE);
     else
         ShowWindow(win->hwndFrame, SW_SHOW);
@@ -3576,7 +3575,6 @@ static void EnterFullScreen(WindowInfo& win, bool presentation)
     if (!presentation || !win.isFullScreen)
         win.nonFullScreenWindowStyle = ws;
     ws &= ~(WS_BORDER|WS_CAPTION|WS_THICKFRAME);
-    ws |= WS_MAXIMIZE;
 
     win.nonFullScreenFrameRect = WindowRect(win.hwndFrame);
     RectI rect = GetFullscreenRect(win.hwndFrame);
