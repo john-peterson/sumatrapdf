@@ -2223,20 +2223,29 @@ static void OnMouseLeftButtonUp(WindowInfo& win, int x, int y, WPARAM key)
     win.linkOnLastButtonDown = NULL;
     win.mouseAction = MA_IDLE;
 
+	bool isLeft = x < 10;
+	bool isRight = x > win.canvasRc.dx - 10;
+	bool isTop = y < 10;
+	bool isBottom = y > win.canvasRc.dy - 10;
+
+    bool enabled = win.IsDocLoaded();
+    DisplayMode displayMode = enabled ? win.dm->GetDisplayMode() : gGlobalPrefs.defaultDisplayMode;
+
+    /* if we had a selection and this was just a click, hide the selection */
+    if (win.showSelection && !didDragMouse)
+        ClearSearchResult(&win);
+
     if (didDragMouse)
         /* pass */;
     else if (activeLink && activeLink->GetRect().Contains(ptPage)) {
         win.linkHandler->GotoLink(activeLink->AsLink());
         SetCursor(gCursorArrow);
     }
-    /* if we had a selection and this was just a click, hide the selection */
-    else if (win.showSelection)
-        ClearSearchResult(&win);
-    /* in presentation mode, change pages on left/right-clicks */
+    /* in presentation mode, change pages on left-clicks */
     else if (win.fullScreen || PM_ENABLED == win.presentation) {
-        if ((key & MK_SHIFT))
+        if (displayModeSingle(displayMode) && isTop || !displayModeSingle(displayMode) && isLeft)
             win.dm->GoToPrevPage(0);
-        else
+        else if (displayModeSingle(displayMode) && isBottom || !displayModeSingle(displayMode) && isRight)
             win.dm->GoToNextPage(0);
     }
     /* return from white/black screens in presentation mode */
@@ -2249,9 +2258,7 @@ static void OnMouseLeftButtonUp(WindowInfo& win, int x, int y, WPARAM key)
 static void OnMouseLeftButtonDblClk(WindowInfo& win, int x, int y, WPARAM key)
 {
     //lf("Left button clicked on %d %d", x, y);
-    if ((win.fullScreen || win.presentation) && !(key & ~MK_LBUTTON) || win.IsAboutWindow()) {
-        // in presentation and fullscreen modes, left clicks turn the page,
-        // make two quick left clicks (AKA one double-click) turn two pages
+	if (win.IsAboutWindow()) {
         OnMouseLeftButtonDown(win, x, y, key);
         return;
     }
@@ -2353,23 +2360,15 @@ static void OnMouseRightButtonUp(WindowInfo& win, int x, int y, WPARAM key)
         abs(y - win.dragStart.y) > GetSystemMetrics(SM_CYDRAG);
     OnDraggingStop(win, x, y, !didDragMouse);
 
-    win.mouseAction = MA_IDLE;
-
     if (didDragMouse)
         /* pass */;
-    else if (win.fullScreen || PM_ENABLED == win.presentation) {
-        if ((key & MK_CONTROL))
-            OnContextMenu(&win, x, y);
-        else if ((key & MK_SHIFT))
-            win.dm->GoToNextPage(0);
-        else
-            win.dm->GoToPrevPage(0);
-    }
     /* return from white/black screens in presentation mode */
     else if (PM_BLACK_SCREEN == win.presentation || PM_WHITE_SCREEN == win.presentation)
         win.ChangePresentationMode(PM_ENABLED);
     else
         OnContextMenu(&win, x, y);
+
+    win.mouseAction = MA_IDLE;
 }
 
 static void OnMouseRightButtonDblClick(WindowInfo& win, int x, int y, WPARAM key)
@@ -4881,6 +4880,24 @@ static LRESULT FrameOnCommand(WindowInfo *win, HWND hwnd, UINT msg, WPARAM wPara
                 win->dm->Navigate(1);
             break;
 
+        case IDM_SEARCH_ONLINE:
+            // Don't break the shortcut for text boxes
+            if (win->hwndFindBox == GetFocus() || win->hwndPageBox == GetFocus())
+                SendMessage(GetFocus(), WM_COPY, 0, 0);
+            else if (!HasPermission(Perm_CopySelection))
+                break;
+            else if (win->IsChm())
+                win->dm->AsChmEngine()->CopySelection();
+            else if (win->selectionOnPage) {
+                WStrVec url;
+                WCHAR *urlBase = L"https://www.google.com/search?q=";
+                WCHAR *q = str::Replace(GetSelection(win), L"&", L"%26");
+                url.Append(str::Dup(urlBase));
+                url.Append(q);
+				LaunchBrowser(url.Join());
+			}
+            break;
+            
         case IDM_COPY_SELECTION:
             // Don't break the shortcut for text boxes
             if (win->hwndFindBox == GetFocus() || win->hwndPageBox == GetFocus())

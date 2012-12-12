@@ -99,6 +99,8 @@ size_t  TransChars(char *str, const char *oldChars, const char *newChars);
 size_t  TransChars(WCHAR *str, const WCHAR *oldChars, const WCHAR *newChars);
 char *  Replace(const char *s, const char *toReplace, const char *replaceWith);
 
+WCHAR *Replace(WCHAR *orig, WCHAR *rep, WCHAR *with);
+
 size_t  NormalizeWS(WCHAR *str);
 size_t  RemoveChars(char *str, const char *toRemove);
 size_t  RemoveChars(WCHAR *str, const WCHAR *toRemove);
