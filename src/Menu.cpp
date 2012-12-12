@@ -65,7 +65,7 @@ static MenuDef menuDefFile[] = {
     { SEP_ITEM,                             0,                          MF_REQ_DISK_ACCESS | MF_NOT_FOR_EBOOK_UI },
     { _TRN("P&roperties\tCtrl+D"),          IDM_PROPERTIES,             0 },
     { SEP_ITEM,                             0,                          0 },
-    { _TRN("E&xit\tCtrl+Q"),                IDM_EXIT,                   0 }
+    { _TRN("E&xit\tEsc"),                   IDM_EXIT,                   0 }
 };
 
 // the whole menu is MF_NOT_FOR_EBOOK_UI
@@ -80,7 +80,7 @@ static MenuDef menuDefView[] = {
     { _TRN("Rotate &Right\tCtrl+Shift++"),  IDM_VIEW_ROTATE_RIGHT,      MF_NOT_FOR_CHM },
     { SEP_ITEM,                             0,                          MF_NOT_FOR_CHM },
     { _TRN("Pr&esentation\tCtrl+L"),        IDM_VIEW_PRESENTATION_MODE, MF_REQ_FULLSCREEN },
-    { _TRN("F&ullscreen\tCtrl+Shift+L"),    IDM_VIEW_FULLSCREEN,        MF_REQ_FULLSCREEN },
+    { _TRN("F&ullscreen\tF11"),             IDM_VIEW_FULLSCREEN,        MF_REQ_FULLSCREEN },
     { SEP_ITEM,                             0,                          MF_REQ_FULLSCREEN },
     { _TRN("Book&marks\tF12"),              IDM_VIEW_BOOKMARKS,         0 },
     { _TRN("Show &Toolbar"),                IDM_VIEW_SHOW_HIDE_TOOLBAR, 0 },
@@ -170,13 +170,13 @@ static MenuDef menuDefDebugEbooks[] = {
 
 // the whole menu is MF_NOT_FOR_CHM | MF_NOT_FOR_EBOOK_UI
 static MenuDef menuDefContext[] = {
-    { _TRN("&Copy Selection"),              IDM_COPY_SELECTION,         MF_REQ_ALLOW_COPY },
+    { _TRN("&Copy Selection\tCtrl+C"),      IDM_COPY_SELECTION,         MF_REQ_ALLOW_COPY },
     { _TRN("Copy &Link Address"),           IDM_COPY_LINK_TARGET,       MF_REQ_ALLOW_COPY },
     { _TRN("Copy Co&mment"),                IDM_COPY_COMMENT,           MF_REQ_ALLOW_COPY },
     { _TRN("Copy &Image"),                  IDM_COPY_IMAGE,             MF_REQ_ALLOW_COPY },
     { _TRN(""),                             IDM_SEARCH_ONLINE,                 MF_NO_TRANSLATE },
     { SEP_ITEM,                             0,                          MF_REQ_ALLOW_COPY },
-    { _TRN("Select &All"),                  IDM_SELECT_ALL,             MF_REQ_ALLOW_COPY },
+    { _TRN("Select &All\tCtrl+A"),          IDM_SELECT_ALL,             MF_REQ_ALLOW_COPY },
     { SEP_ITEM,                             0,                          MF_PLUGIN_MODE_ONLY | MF_REQ_ALLOW_COPY },
     { _TRN("&Save As..."),                  IDM_SAVEAS,                 MF_PLUGIN_MODE_ONLY | MF_REQ_DISK_ACCESS },
     { _TRN("&Print..."),                    IDM_PRINT,                  MF_PLUGIN_MODE_ONLY | MF_REQ_PRINTER_ACCESS },
