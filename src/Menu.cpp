@@ -39,6 +39,8 @@ void MenuUpdateDisplayMode(WindowInfo* win)
 
     CheckMenuRadioItem(win->menu, IDM_VIEW_LAYOUT_FIRST, IDM_VIEW_LAYOUT_LAST, id, MF_BYCOMMAND);
     win::menu::SetChecked(win->menu, IDM_VIEW_CONTINUOUS, displayModeContinuous(displayMode));
+    win::menu::SetChecked(menu, IDM_VIEW_SCROLLBAR, win->dm->showScrollbars);
+    win::menu::SetEnabled(menu, IDM_VIEW_SCROLLBAR, displayModeContinuous(displayMode));
 }
 
 static MenuDef menuDefFile[] = {
