@@ -215,16 +215,15 @@ void ZoomToSelection(WindowInfo *win, float factor, bool scrollToFit, bool relat
     UpdateToolbarState(win);
 }
 
-void CopySelectionToClipboard(WindowInfo *win)
+WCHAR *GetSelection(WindowInfo *win)
 {
-    if (!win->selectionOnPage) return;
-    CrashIf(win->selectionOnPage->Count() == 0);
-    if (win->selectionOnPage->Count() == 0) return;
-    CrashIf(!win->dm || !win->dm->engine);
-    if (!win->dm || !win->dm->engine) return;
+    ScopedMem<WCHAR> selText;
 
-    if (!OpenClipboard(NULL)) return;
-    EmptyClipboard();
+    if (!win->selectionOnPage) return NULL;
+    CrashIf(win->selectionOnPage->Count() == 0);
+    if (win->selectionOnPage->Count() == 0) return NULL;
+    CrashIf(!win->dm || !win->dm->engine);
+    if (!win->dm || !win->dm->engine) return NULL;
 
 #ifndef DISABLE_DOCUMENT_RESTRICTIONS
     if (!win->dm->engine->AllowsCopyingText())
@@ -232,7 +231,6 @@ void CopySelectionToClipboard(WindowInfo *win)
     else
 #endif
     if (!win->dm->engine->IsImageCollection()) {
-        ScopedMem<WCHAR> selText;
         bool isTextSelection = win->dm->textSelection->result.len > 0;
         if (isTextSelection) {
             selText.Set(win->dm->textSelection->ExtractText(L"\r\n"));
@@ -247,16 +245,27 @@ void CopySelectionToClipboard(WindowInfo *win)
             }
             selText.Set(selections.Join());
         }
+    }
 
-        // don't copy empty text
-        if (!str::IsEmpty(selText.Get()))
-            CopyTextToClipboard(selText, true);
+    return selText.StealData();
+}
 
-        if (isTextSelection) {
-            // don't also copy the first line of a text selection as an image
-            CloseClipboard();
-            return;
-        }
+void CopySelectionToClipboard(WindowInfo *win)
+{
+    if (!OpenClipboard(NULL)) return;
+    EmptyClipboard();
+
+    ScopedMem<WCHAR> selText(GetSelection(win));
+
+    // don't copy empty text
+    if (!str::IsEmpty(selText.Get()))
+        CopyTextToClipboard(selText, true);
+
+    bool isTextSelection = win->dm->textSelection->result.len > 0;
+    if (isTextSelection) {
+        // don't also copy the first line of a text selection as an image
+        CloseClipboard();
+        return;
     }
 
     /* also copy a screenshot of the current selection to the clipboard */
