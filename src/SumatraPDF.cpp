@@ -5426,7 +5426,9 @@ InitMouseWheelInfo:
             break;
 
         case WM_MOUSEACTIVATE:
-            if (win && (win->presentation || win->isFullScreen) && hwnd != GetForegroundWindow())
+            // disable auto-scroll
+            if (HIWORD(lParam) == WM_MBUTTONDOWN
+            || (win && (win->presentation || win->isFullScreen) && hwnd != GetForegroundWindow()))
                 return MA_ACTIVATEANDEAT;
             return MA_ACTIVATE;
 
