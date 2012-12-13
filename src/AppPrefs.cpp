@@ -60,6 +60,7 @@
 #define LAST_UPDATE_STR             "LastUpdate"
 #define ENABLE_AUTO_UPDATE_STR      "EnableAutoUpdate"
 #define REMEMBER_OPENED_FILES_STR   "RememberOpenedFiles"
+#define NATURAL_SORT_STR            "NaturalSort"
 #define PRINT_COMMANDLINE           "PrintCommandLine"
 #define GLOBAL_PREFS_ONLY_STR       "GlobalPrefsOnly"
 #define USE_GLOBAL_VALUES_STR       "UseGlobalValues"
@@ -97,6 +98,7 @@ SerializableGlobalPrefs gGlobalPrefs = {
     false, // bool pdfAssociateShouldAssociate
     true, // bool enableAutoUpdate
     true, // bool rememberOpenedFiles
+    true, // bool naturalSort
     ABOUT_BG_COLOR_DEFAULT, // int bgColor
     false, // bool escToExit
     false, // bool useSysColors
@@ -155,6 +157,7 @@ static BencDict* SerializeGlobalPrefs(SerializableGlobalPrefs& globalPrefs)
     prefs->Add(USE_SYS_COLORS_STR, globalPrefs.useSysColors);
     prefs->Add(ENABLE_AUTO_UPDATE_STR, globalPrefs.enableAutoUpdate);
     prefs->Add(REMEMBER_OPENED_FILES_STR, globalPrefs.rememberOpenedFiles);
+    prefs->Add(NATURAL_SORT_STR, globalPrefs.naturalSort);
     prefs->Add(GLOBAL_PREFS_ONLY_STR, globalPrefs.globalPrefsOnly);
     prefs->Add(SHOW_RECENT_FILES_STR, globalPrefs.showStartPage);
 
@@ -482,6 +485,7 @@ static void DeserializePrefs(const char *prefsTxt, SerializableGlobalPrefs& glob
     Retrieve(global, BG_COLOR_STR, globalPrefs.bgColor);
     Retrieve(global, ENABLE_AUTO_UPDATE_STR, globalPrefs.enableAutoUpdate);
     Retrieve(global, REMEMBER_OPENED_FILES_STR, globalPrefs.rememberOpenedFiles);
+    Retrieve(global, NATURAL_SORT_STR, globalPrefs.naturalSort);
     Retrieve(global, GLOBAL_PREFS_ONLY_STR, globalPrefs.globalPrefsOnly);
     Retrieve(global, SHOW_RECENT_FILES_STR, globalPrefs.showStartPage);
 

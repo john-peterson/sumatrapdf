@@ -183,12 +183,26 @@ ENGINE_OBJS = \
 	$(OS)\ImagesEngine.obj $(ZIP_OBJS) $(UNRAR_OBJS) \
 	$(OS)\DjVuEngine.obj $(DJVU_OBJS) \
 	$(OS)\ChmEngine.obj $(OS)\ChmDoc.obj $(CHMLIB_OBJS) \
-	$(OS)\EpubEngine.obj $(OS)\EpubDoc.obj
+	$(OS)\EpubEngine.obj $(OS)\EpubDoc.obj \
+	$(PREFS_OBJS)
 
 EBOOK_OBJS = \
 	$(OS)\MobiDoc.obj $(OU)\PdbReader.obj $(OS)\HtmlFormatter.obj \
 	$(OS)\EbookControls.obj $(OS)\EbookController.obj $(OS)\EbookWindow.obj
 
+PREFS_OBJS = \
+	$(OS)\AppPrefs.obj $(OS)\DisplayModel.obj $(OS)\CrashHandler.obj $(OS)\Doc.obj \
+	$(OS)\Favorites.obj $(OS)\TextSearch.obj $(OS)\SumatraAbout.obj \
+	$(OS)\SumatraDialogs.obj $(OS)\SumatraProperties.obj \
+	$(OS)\SumatraPDF.obj $(OS)\translations.obj $(OS)\FileWatch.obj \
+	$(OS)\PdfSync.obj $(OS)\RenderCache.obj $(OS)\TextSelection.obj \
+	$(OS)\WindowInfo.obj $(OS)\ParseCommandLine.obj $(OS)\StressTesting.obj \
+	$(OS)\UnitTests.obj $(OS)\AppTools.obj $(OS)\TableOfContents.obj \
+	$(OS)\Toolbar.obj $(OS)\Print.obj $(OS)\Notifications.obj \
+	$(OS)\Search.obj $(OS)\Menu.obj $(OS)\ExternalPdfViewer.obj \
+	$(OS)\Selection.obj \
+	$(UTILS_OBJS) $(SYNCTEX_OBJS) $(EBOOK_OBJS) $(MUI_OBJS)
+	
 SUMATRA_OBJS = \
 	$(OS)\AppPrefs.obj $(OS)\DisplayModel.obj $(OS)\CrashHandler.obj $(OS)\Doc.obj \
 	$(OS)\Favorites.obj $(OS)\TextSearch.obj $(OS)\SumatraAbout.obj \
@@ -236,7 +250,7 @@ BROWSER_PLUGIN_OBJS = \
 
 ENGINEDUMP_OBJS = \
 	$(OS)\EngineDump.obj $(ENGINE_OBJS) $(LIBS_OBJS) $(UTILS_OBJS) \
-	$(OS)\HtmlFormatter.obj $(OMUI)\MiniMui.obj $(OS)\MobiDoc.obj \
+	$(OS)\HtmlFormatter.obj $(OS)\MobiDoc.obj \
 	$(OS)\Doc.obj $(OU)\PdbReader.obj
 
 MEMTRACE_OBJS = \

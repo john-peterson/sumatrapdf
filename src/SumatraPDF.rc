@@ -1,7 +1,6 @@
 // Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
-#include "Version.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -28,8 +27,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION VER_RESOURCE
- PRODUCTVERSION VER_RESOURCE
+ FILEVERSION 2,2,0,0
+ PRODUCTVERSION 2,2,0,0
  FILEFLAGSMASK 0x0L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -45,12 +44,12 @@ BEGIN
         BLOCK "040904E4"
         BEGIN
             VALUE "FileDescription", "SumatraPDF"
-            VALUE "FileVersion", VER_RESOURCE_STR
-            VALUE "LegalCopyright", COPYRIGHT_STR
+            VALUE "FileVersion", "2.2.0.0"
+            VALUE "LegalCopyright", "Copyright 2006-2012 all authors (GPLv3)"
             VALUE "OriginalFilename", "SumatraPDF.exe"
             VALUE "ProductName", "SumatraPDF"
-            VALUE "ProductVersion", VER_RESOURCE_STR
-            VALUE "CompanyName", PUBLISHER_STR
+            VALUE "ProductVersion", "2.2.0.0"
+            VALUE "CompanyName", "Krzysztof Kowalczyk"
         END
     END
     BLOCK "VarFileInfo"
@@ -110,8 +109,8 @@ BEGIN
     VK_OEM_PLUS,    IDT_VIEW_ZOOMIN,        VIRTKEY, CONTROL
     VK_OEM_PLUS,    IDM_VIEW_ROTATE_RIGHT,  VIRTKEY, SHIFT, CONTROL
     VK_INSERT,      IDM_COPY_SELECTION,     VIRTKEY, CONTROL
-    VK_F2,          IDM_RENAME_FILE,        VIRTKEY
-    VK_F3,          IDM_FIND_NEXT,          VIRTKEY
+    VK_F2,          IDM_RENAME_FILE,        VIRTKEY 
+    VK_F3,          IDM_FIND_NEXT,          VIRTKEY 
     VK_F3,          IDM_FIND_PREV,          VIRTKEY, SHIFT
     VK_F3,          IDM_FIND_NEXT_SEL,      VIRTKEY, CONTROL
     VK_F3,          IDM_FIND_PREV_SEL,      VIRTKEY, SHIFT, CONTROL
@@ -214,7 +213,7 @@ BEGIN
     PUSHBUTTON      "&No, thanks",IDCANCEL,174,49,70,14
 END
 
-IDD_DIALOG_SETTINGS DIALOGEX 0, 0, 240, 241
+IDD_DIALOG_SETTINGS DIALOGEX 0, 0, 240, 256
 STYLE DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 CAPTION "Settings"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
@@ -230,16 +229,18 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,66,216,9
     CONTROL         "Replace document &colors with Windows color scheme",IDC_USE_SYS_COLORS,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,79,216,9
-    GROUPBOX        "Advanced",IDC_SECTION_ADVANCED,6,100,228,57
+    GROUPBOX        "Advanced",IDC_SECTION_ADVANCED,6,95,228,79
     CONTROL         "Automatically check for &updates",IDC_AUTO_UPDATE_CHECKS,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,110,216,9
-    CONTROL         "Remember &opened files",IDC_REMEMBER_OPENED_FILES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,123,216,9
-    PUSHBUTTON      "Make SumatraPDF a default PDF reader",IDC_SET_DEFAULT_READER,12,137,216,14
-    GROUPBOX        "Set inverse search command-line",IDC_SECTION_INVERSESEARCH,6,163,228,52
-    LTEXT           "Enter the command-line to invoke when you double-click on the PDF document:",IDC_CMDLINE_LABEL,12,175,216,18
-    COMBOBOX        IDC_CMDLINE,12,195,216,13,CBS_DROPDOWN | CBS_AUTOHSCROLL | CBS_HASSTRINGS | CBS_DISABLENOSCROLL | WS_TABSTOP
-    DEFPUSHBUTTON   "OK",IDOK,128,221,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,184,221,50,14
+    CONTROL         "Remember &opened files",IDC_REMEMBER_OPENED_FILES,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,123,216,9
+    PUSHBUTTON      "Make SumatraPDF a default PDF reader",IDC_SET_DEFAULT_READER,12,152,216,14
+    GROUPBOX        "Set inverse search command-line",IDC_SECTION_INVERSESEARCH,6,178,228,52
+    LTEXT           "Enter the command-line to invoke when you double-click on the PDF document:",IDC_CMDLINE_LABEL,12,190,216,18
+    COMBOBOX        IDC_CMDLINE,12,210,216,13,CBS_DROPDOWN | CBS_AUTOHSCROLL | CBS_HASSTRINGS | CBS_DISABLENOSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,128,236,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,184,236,50,14
+    CONTROL         "Use &natural sorting order",IDC_NATURAL_SORT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,136,216,9
 END
 
 IDD_DIALOG_CUSTOM_ZOOM DIALOGEX 0, 0, 116, 60
@@ -284,9 +285,6 @@ BEGIN
     EDITTEXT        IDC_FAV_NAME_EDIT,7,20,222,14,ES_AUTOHSCROLL
 END
 
-#ifdef DEBUG
-IDD_SAMPLE_MOBI     RCDATA                      "sample_mobi.html"
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -351,7 +349,7 @@ BEGIN
 
     IDD_DIALOG_SETTINGS, DIALOG
     BEGIN
-        BOTTOMMARGIN, 157
+        BOTTOMMARGIN, 174
     END
 
     IDD_DIALOG_FAV_ADD, DIALOG

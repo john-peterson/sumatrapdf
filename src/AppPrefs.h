@@ -42,6 +42,9 @@ struct SerializableGlobalPrefs {
     /* if true, we remember which files we opened and their settings */
     bool rememberOpenedFiles;
 
+    /* if true use natural sorting instead of ascii sorting */
+    bool naturalSort;
+
     /* used for the Start page, About page and Properties dialog
        (negative values indicate that the default color will be used) */
     int  bgColor;

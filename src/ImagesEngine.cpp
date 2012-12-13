@@ -4,6 +4,7 @@
 #include "BaseUtil.h"
 #include "ImagesEngine.h"
 
+#include "AppPrefs.h"
 #include "FileUtil.h"
 using namespace Gdiplus;
 #include "GdiPlusUtil.h"
@@ -785,13 +786,16 @@ bool CbxEngineImpl::FinishLoadingCbz()
     if (metadata)
         json::Parse(metadata, this);
 
-    Vec<const WCHAR *> pageFileNames;
+    WStrVec pageFileNames;
     for (const WCHAR **fn = allFileNames.IterStart(); fn; fn = allFileNames.IterNext()) {
         if (*fn)
-            pageFileNames.Append(*fn);
+            pageFileNames.Append((WCHAR*)*fn);
     }
-    pageFileNames.Sort(cmpAscii);
-    for (const WCHAR **fn = pageFileNames.IterStart(); fn; fn = pageFileNames.IterNext()) {
+    if (gGlobalPrefs.naturalSort)
+        pageFileNames.SortNatural();
+    else
+        pageFileNames.Sort();
+    for (WCHAR **fn = pageFileNames.IterStart(); fn; fn = pageFileNames.IterNext()) {
         fileIdxs.Append(allFileNames.Find(*fn));
     }
     assert(pageFileNames.Count() == fileIdxs.Count());
@@ -926,6 +930,9 @@ public:
     static int cmpPageByName(const void *o1, const void *o2) {
         ImagesPage *p1 = *(ImagesPage **)o1;
         ImagesPage *p2 = *(ImagesPage **)o2;
+    if (gGlobalPrefs.naturalSort)
+        return str::CmpNatural(p1->fileName, p2->fileName);
+    else
         return wcscmp(p1->fileName, p2->fileName);
     }
 };

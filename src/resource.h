@@ -131,6 +131,7 @@
 #define IDC_SET_DEFAULT_READER          1030
 #define IDC_REMEMBER_OPENED_FILES       1031
 #define IDC_FIND_EDIT                   1032
+#define IDC_NATURAL_SORT             1032
 #define IDC_MATCH_CASE                  1033
 #define IDC_FIND_NEXT_HINT              1034
 #define IDC_SECTION_INVERSESEARCH       1040
